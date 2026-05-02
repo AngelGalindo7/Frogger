@@ -205,7 +205,7 @@ async def main():
   # have spawned in the group, and a "phase" string that determines whether or not the lane will spawn a vehicle, wait to spawn another vehicle, or wait to spawn another group of 3 vehicles
   lane_properties = []
   for a in range(LANES): # LANES is a constant (6)
-    lane_properties.append([0.0, 0, "group_separation"])
+    lane_properties.append([0.0, 0, "spawn"])
 
   # Elements: counter, cars_spawned, phase
   # Phases: spawn, car_separation, group_separation
@@ -554,7 +554,7 @@ async def main():
             for lp in lane_properties:
               lp[0] = 0.0
               lp[1] = 0
-              lp[2] = "group_separation"
+              lp[2] = "spawn"
         mouse_was_down = mouse_now
 
 
