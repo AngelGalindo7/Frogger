@@ -263,19 +263,27 @@ async def main():
 
   clock.tick(FPS)
 
-  # Home screen loop
-  title_font = pygame.font.SysFont('Comic Sans MS', 72)
-  subtitle_font = pygame.font.SysFont('Comic Sans MS', 30)
-  credit_font = pygame.font.SysFont('Comic Sans MS', 20)
+  # Home screen
+  title_font   = pygame.font.SysFont('impact', 84)
+  subtitle_font = pygame.font.SysFont('arial', 26)
+  credit_font  = pygame.font.SysFont('arial', 17)
   at_home = True
   while at_home:
-    screen.fill((0, 0, 0))
-    title_surf = title_font.render("FROGGER", False, (0, 255, 0))
-    sub_surf = subtitle_font.render("Press any key to start", False, (255, 255, 255))
-    credit_surf = credit_font.render("Designed & developed by Angel Galindo", False, (180, 180, 180))
-    screen.blit(title_surf, title_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 80)))
-    screen.blit(sub_surf, sub_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 10)))
-    screen.blit(credit_surf, credit_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 60)))
+    screen.fill((8, 16, 8))
+    lane_colors = [(15,50,15),(0,25,75),(10,40,10),(30,30,30),(22,22,22),(22,22,22),(22,22,22)]
+    for i, color in enumerate(lane_colors):
+      pygame.draw.rect(screen, color, (0, HEIGHT - (i+1)*40, WIDTH, 40))
+    cx, ty = WIDTH//2, 200
+    screen.blit(title_font.render("FROGGER", True, (0,80,0)),
+                title_font.render("FROGGER", True, (0,80,0)).get_rect(center=(cx+4, ty+4)))
+    screen.blit(title_font.render("FROGGER", True, (0,210,50)),
+                title_font.render("FROGGER", True, (0,210,50)).get_rect(center=(cx, ty)))
+    pygame.draw.line(screen, (0,140,30), (cx-130, ty+60), (cx+130, ty+60), 2)
+    if (pygame.time.get_ticks()//550) % 2 == 0:
+      sub = subtitle_font.render("PRESS ANY KEY TO START", True, (220,220,220))
+      screen.blit(sub, sub.get_rect(center=(cx, ty+100)))
+    cred = credit_font.render("Designed & developed by Angel Galindo", True, (110,110,110))
+    screen.blit(cred, cred.get_rect(center=(cx, ty+155)))
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         pygame.quit()
