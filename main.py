@@ -162,11 +162,9 @@ normalScore = []
 lifeTracker = []
 
 def lose_life():
-  if len(frogs.sprites()) > 0:
-    frogs_sprites_list = frogs.sprites()
-    frogs_sprites_list.pop(len(frogs.sprites())-1)
-    frogs.empty()
-    frogs.add(*frogs_sprites_list)
+  life_frogs = [f for f in frogs.sprites() if f.color == "purple"]
+  if len(life_frogs) > 0:
+    life_frogs[-1].kill()
 
 def show_gameover():
   
