@@ -17,8 +17,8 @@ body {
 #info,
 #infobox,
 #box,
-.emscripten,
-.emscripten_border { display: none !important; }
+div.emscripten,
+div.emscripten_border { display: none !important; }
 
 /* ── landing overlay ── */
 #overlay {
