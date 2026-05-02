@@ -28,7 +28,10 @@ jobs:
         run: pip install pygame-ce pygbag
 
       - name: Build with pygbag
-        run: python -m pygbag --build --template template.html main.py
+        run: python -m pygbag --build main.py
+
+      - name: Inject overlay into generated index.html
+        run: python web/inject_overlay.py
 
       - uses: actions/upload-pages-artifact@v3
         with:
