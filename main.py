@@ -533,10 +533,8 @@ while in_game:
     if time.time() - game_over_timestamp >= 2:
       btn_font = pygame.font.SysFont('Comic Sans MS', 35)
       btn_text = btn_font.render("Try Again", False, (255, 255, 255))
-      btn_rect = pygame.Rect(WIDTH//2 - 80, HEIGHT//2 + 70, 160, 50)
-      pygame.draw.rect(screen, (50, 50, 50), btn_rect)
-      pygame.draw.rect(screen, (255, 255, 255), btn_rect, 2)
-      screen.blit(btn_text, (btn_rect.x + 15, btn_rect.y + 8))
+      btn_rect = btn_text.get_rect(center=(WIDTH//2, HEIGHT//2 + 80))
+      screen.blit(btn_text, btn_rect)
 
       mouse_now = pygame.mouse.get_pressed()[0]
       if mouse_now and not mouse_was_down:
