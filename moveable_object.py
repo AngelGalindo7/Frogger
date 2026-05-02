@@ -60,10 +60,6 @@ class MovingObject(pygame.sprite.Sprite):
         super().__init__()
 
         pos = properties[0]
-        # Sets the position
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
-
         self.position = Vector2(float(pos[0]), float(pos[1]))
 
         # Direction it should be moving
@@ -96,9 +92,10 @@ class Vehicle(MovingObject):
     vehicle_properties = VEHICLES[lane_num]
     
     self.image = VECHILE_SKIN_SPRITES[vehicle_properties[4]]
-    self.rect = self.image.get_rect()
-
     super().__init__(vehicle_properties, lane_num)
+    self.rect = self.image.get_rect()
+    self.rect.x = round(self.position.x)
+    self.rect.y = round(self.position.y)
 
 class Jogger:
   def __init__(self, x_input, y_input):
@@ -122,9 +119,10 @@ class Turtle(MovingObject):
     # At some point we need to add the other parts to the turtle animation - Moth
     self.image_list = ["Turtle/Turtle_sample.png", "Turtle/Turtle_sample.png", "Turtle/Turtle_sample.png"]
     self.image = turtle_properties[4]
-    self.rect = self.image.get_rect()
-
     super().__init__(TURTLES[lane_num], lane_num)
+    self.rect = self.image.get_rect()
+    self.rect.x = round(self.position.x)
+    self.rect.y = round(self.position.y)
     #self.image.set_colorkey((255, 255, 255)) # RGB for white
     #self.image = pygame.image.load("Vehicle_skin/Tractor_2main.png")
   
@@ -148,10 +146,10 @@ class Log(MovingObject):
     log_properties = LOGS[lane_num]
     
     self.image = LOG_SKIN_SPRITES[log_properties[4]]
-
-    self.rect = self.image.get_rect()
-
     super().__init__(LOGS[lane_num], lane_num)
+    self.rect = self.image.get_rect()
+    self.rect.x = round(self.position.x)
+    self.rect.y = round(self.position.y)
     #self.image.set_colorkey((255, 255, 255)) # RGB for white
     #self.image = pygame.image.load("Vehicle_skin/Tractor_2main.png")
 
