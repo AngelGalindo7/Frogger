@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FROGGER</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #canvas { display: block; }
+
+    /* ── landing overlay ── */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: #070d07;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.7s ease;
+    }
+    #overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── lane strips ── */
+    .lanes { position: absolute; bottom: 0; left: 0; width: 100%; }
+    .lane  { height: 40px; position: relative; overflow: hidden; }
+    .lane.road::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0;
+      width: 200%; height: 3px;
+      transform: translateY(-50%);
+      background: repeating-linear-gradient(
+        to right,
+        transparent 0, transparent 36px,
+        rgba(255,255,255,0.07) 36px, rgba(255,255,255,0.07) 72px
+      );
+      animation: dash 1.6s linear infinite;
+    }
+    @keyframes dash {
+      from { transform: translateY(-50%) translateX(0); }
+      to   { transform: translateY(-50%) translateX(72px); }
+    }
+    .lanes-fade {
+      position: absolute;
+      bottom: 280px; left: 0;
+      width: 100%; height: 110px;
+      background: linear-gradient(to bottom, #070d07, transparent);
+    }
+
+    /* ── content ── */
+    .content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-family: Impact, 'Arial Black', sans-serif;
+      font-size: clamp(64px, 13vw, 104px);
+      letter-spacing: 10px;
+      color: #00d637;
+      text-shadow: 5px 5px 0 #004d10, 0 0 40px rgba(0,210,55,0.3);
+      animation: glow 3s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%, 100% { text-shadow: 5px 5px 0 #004d10, 0 0 40px rgba(0,210,55,0.30); }
+      50%       { text-shadow: 5px 5px 0 #004d10, 0 0 72px rgba(0,230,70,0.65); }
+    }
+
+    .tagline {
+      margin-top: 12px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 7px;
+      color: #2a622a;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      margin: 24px 0 28px;
+      width: 220px; height: 1px;
+      background: linear-gradient(to right, transparent, #00a030, transparent);
+    }
+
+    #playBtn {
+      padding: 15px 72px;
+      font-family: Arial, sans-serif;
+      font-size: 17px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      background: #444;
+      color: #888;
+      border: none;
+      border-radius: 8px;
+      cursor: default;
+      transition: background 0.2s, color 0.2s, transform 0.12s, box-shadow 0.2s;
+    }
+    #playBtn.ready {
+      background: #009930;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,153,48,0.35);
+    }
+    #playBtn.ready:hover {
+      background: #00bf3f;
+      transform: scale(1.06);
+      box-shadow: 0 6px 36px rgba(0,200,60,0.55);
+    }
+    #playBtn.ready:active { transform: scale(0.97); }
+
+    #status {
+      margin-top: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #2a622a;
+      min-height: 18px;
+      text-transform: uppercase;
+    }
+
+    /* ── fade to black on click ── */
+    #fade {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.65s ease;
+    }
+    #fade.out { opacity: 1; }
+
+    .credit {
+      position: absolute;
+      bottom: 14px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #2a3a2a;
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="fade"></div>
+
+  <div id="overlay">
+    <div class="lanes">
+      <div class="lane" style="background:#0d2e1a"></div>
+      <div class="lane" style="background:#001540"></div>
+      <div class="lane" style="background:#091e09"></div>
+      <div class="lane road" style="background:#191919"></div>
+      <div class="lane road" style="background:#151515"></div>
+      <div class="lane road" style="background:#151515"></div>
+      <div class="lane road" style="background:#111111"></div>
+    </div>
+    <div class="lanes-fade"></div>
+
+    <div class="content">
+      <h1>FROGGER</h1>
+      <p class="tagline">Classic Arcade Action</p>
+      <div class="divider"></div>
+      <button id="playBtn" disabled>LOADING</button>
+      <p id="status">Downloading game</p>
+    </div>
+
+    <p class="credit">Designed &amp; developed by Angel Galindo</p>
+  </div>
+
+  <canvas id="canvas" width="600" height="800"></canvas>
+
+  <script>
+    const btn     = document.getElementById('playBtn');
+    const status  = document.getElementById('status');
+    const fade    = document.getElementById('fade');
+    const overlay = document.getElementById('overlay');
+
+    function pollReady() {
+      if (window.pygame_ready) {
+        btn.textContent = 'PLAY';
+        btn.disabled = false;
+        btn.classList.add('ready');
+        status.textContent = '';
+      } else {
+        const dots = '.'.repeat((Date.now() / 450 | 0) % 4);
+        status.textContent = 'Downloading game' + dots;
+        setTimeout(pollReady, 250);
+      }
+    }
+    setTimeout(pollReady, 500);
+
+    btn.addEventListener('click', () => {
+      if (!btn.classList.contains('ready')) return;
+      fade.classList.add('out');
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => { fade.style.display = 'none'; }, 50);
+      }, 680);
+    });
+  </script>
+
+</body>
+</html>

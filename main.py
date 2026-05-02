@@ -60,6 +60,15 @@ async def main():
 
   screen = pygame.display.set_mode([WIDTH,HEIGHT]) # This variable will be used whenever drawing something onto the GUI
 
+  # Signal the JS overlay that pygame is ready (pygbag/WASM only)
+  try:
+    import sys
+    if sys.platform == "emscripten":
+      from platform import window
+      window.pygame_ready = True
+  except Exception:
+    pass
+
   """
   Classes:
   Frogger
@@ -262,36 +271,6 @@ async def main():
     grasses.add(EndGrass(x,40))
 
   clock.tick(FPS)
-
-  # Home screen
-  title_font   = pygame.font.SysFont('impact', 84)
-  subtitle_font = pygame.font.SysFont('arial', 26)
-  credit_font  = pygame.font.SysFont('arial', 17)
-  at_home = True
-  while at_home:
-    screen.fill((8, 16, 8))
-    lane_colors = [(15,50,15),(0,25,75),(10,40,10),(30,30,30),(22,22,22),(22,22,22),(22,22,22)]
-    for i, color in enumerate(lane_colors):
-      pygame.draw.rect(screen, color, (0, HEIGHT - (i+1)*40, WIDTH, 40))
-    cx, ty = WIDTH//2, 200
-    screen.blit(title_font.render("FROGGER", True, (0,80,0)),
-                title_font.render("FROGGER", True, (0,80,0)).get_rect(center=(cx+4, ty+4)))
-    screen.blit(title_font.render("FROGGER", True, (0,210,50)),
-                title_font.render("FROGGER", True, (0,210,50)).get_rect(center=(cx, ty)))
-    pygame.draw.line(screen, (0,140,30), (cx-130, ty+60), (cx+130, ty+60), 2)
-    if (pygame.time.get_ticks()//550) % 2 == 0:
-      sub = subtitle_font.render("PRESS ANY KEY TO START", True, (220,220,220))
-      screen.blit(sub, sub.get_rect(center=(cx, ty+100)))
-    cred = credit_font.render("Designed & developed by Angel Galindo", True, (110,110,110))
-    screen.blit(cred, cred.get_rect(center=(cx, ty+155)))
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        pygame.quit()
-        return
-      if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-        at_home = False
-    await asyncio.sleep(0)
-    pygame.display.flip()
 
   while in_game:
     # Fresh canvas
