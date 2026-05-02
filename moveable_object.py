@@ -91,8 +91,8 @@ class Vehicle(MovingObject):
   def __init__(self, lane_num):
     vehicle_properties = VEHICLES[lane_num]
     
-    self.image = VECHILE_SKIN_SPRITES[vehicle_properties[4]]
     super().__init__(vehicle_properties, lane_num)
+    self.image = VECHILE_SKIN_SPRITES[vehicle_properties[4]]
     self.rect = self.image.get_rect()
     self.rect.x = round(self.position.x)
     self.rect.y = round(self.position.y)
@@ -118,8 +118,8 @@ class Turtle(MovingObject):
 
     # At some point we need to add the other parts to the turtle animation - Moth
     self.image_list = ["Turtle/Turtle_sample.png", "Turtle/Turtle_sample.png", "Turtle/Turtle_sample.png"]
-    self.image = turtle_properties[4]
     super().__init__(TURTLES[lane_num], lane_num)
+    self.image = turtle_properties[4]
     self.rect = self.image.get_rect()
     self.rect.x = round(self.position.x)
     self.rect.y = round(self.position.y)
@@ -145,8 +145,8 @@ class Log(MovingObject):
   def __init__(self, lane_num):
     log_properties = LOGS[lane_num]
     
-    self.image = LOG_SKIN_SPRITES[log_properties[4]]
     super().__init__(LOGS[lane_num], lane_num)
+    self.image = LOG_SKIN_SPRITES[log_properties[4]]
     self.rect = self.image.get_rect()
     self.rect.x = round(self.position.x)
     self.rect.y = round(self.position.y)
