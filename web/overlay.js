@@ -3,10 +3,10 @@ const _repeat = String.prototype.repeat;
 String.prototype.repeat = function(n) { return _repeat.call(this, n < 0 ? 0 : n); };
 
 const btn     = document.getElementById('playBtn');
-const status  = document.getElementById('status');
+const status  = document.getElementById('overlayStatus');
 const fade    = document.getElementById('fade');
 const overlay = document.getElementById('overlay');
-const loadBar = document.getElementById('loadBar');
+const loadBar = document.getElementById('overlayLoadBar');
 let   waiting = false;
 
 function animateDots() {
