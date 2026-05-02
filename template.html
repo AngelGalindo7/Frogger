@@ -130,6 +130,30 @@
       text-transform: uppercase;
     }
 
+    #loadBar {
+      display: none;
+      width: 220px;
+      height: 4px;
+      background: #0a2a0a;
+      border-radius: 2px;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    #loadBar.active { display: block; }
+    #loadBar::after {
+      content: '';
+      display: block;
+      width: 40%;
+      height: 100%;
+      background: #00d637;
+      border-radius: 2px;
+      animation: barSlide 1.4s ease-in-out infinite;
+    }
+    @keyframes barSlide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(250%); }
+    }
+
     /* ── fade to black on click ── */
     #fade {
       position: fixed;
@@ -175,6 +199,7 @@
       <div class="divider"></div>
       <button id="playBtn">PLAY</button>
       <p id="status"></p>
+      <div id="loadBar"></div>
     </div>
 
     <p class="credit">Designed &amp; developed by Angel Galindo</p>
@@ -183,25 +208,46 @@
   <canvas id="canvas" width="600" height="800"></canvas>
 
   <script>
+    // Patch String.repeat to clamp negative counts (int32 overflow bug in pygbag's pollReady)
+    const _repeat = String.prototype.repeat;
+    String.prototype.repeat = function(n) { return _repeat.call(this, n < 0 ? 0 : n); };
+
     const btn     = document.getElementById('playBtn');
     const status  = document.getElementById('status');
     const fade    = document.getElementById('fade');
     const overlay = document.getElementById('overlay');
+    const loadBar = document.getElementById('loadBar');
+    let   waiting = false;
 
-    // Animate loading dots in status until game signals ready
     function animateDots() {
-      if (window.pygame_ready) { status.textContent = ''; return; }
-      status.textContent = 'Loading' + '.'.repeat((Date.now() / 450 | 0) % 4);
+      if (waiting || window.pygame_ready) { status.textContent = ''; return; }
+      status.textContent = 'Loading' + '.'.repeat(Math.floor(Date.now() / 450) % 4);
       setTimeout(animateDots, 250);
     }
     animateDots();
 
-    btn.addEventListener('click', () => {
+    function launchGame() {
       fade.classList.add('out');
       setTimeout(() => {
         overlay.classList.add('fade-out');
         setTimeout(() => { fade.style.display = 'none'; }, 50);
       }, 680);
+    }
+
+    btn.addEventListener('click', () => {
+      if (window.pygame_ready) {
+        launchGame();
+      } else {
+        waiting = true;
+        btn.disabled = true;
+        btn.textContent = 'LOADING';
+        status.textContent = '';
+        loadBar.classList.add('active');
+        (function waitForReady() {
+          if (window.pygame_ready) { launchGame(); }
+          else { setTimeout(waitForReady, 100); }
+        })();
+      }
     });
   </script>
 
