@@ -614,14 +614,14 @@ async def main():
     """
 
     # Draws the coordinates of frog
-    my_font = pygame.font.SysFont('Comic Sans MS', 30)
-    text_surface = my_font.render(str(frog_object.rect.x) + ", " + str(frog_object.rect.y), False, (255, 255, 255))
-    screen.blit(text_surface, (0,0))
+    #my_font = pygame.font.SysFont('Comic Sans MS', 30)
+    #text_surface = my_font.render(str(frog_object.rect.x) + ", " + str(frog_object.rect.y), False, (255, 255, 255))
+    #screen.blit(text_surface, (0,0))
 
     # Draws the fps
-    fps_text = "FPS: " + str(clock.get_fps())
-    fps_text_surface = my_font.render(fps_text, False, (255, 255, 255))
-    screen.blit(fps_text_surface, (WIDTH - 300, 0))
+    #fps_text = "FPS: " + str(clock.get_fps())
+    #fps_text_surface = my_font.render(fps_text, False, (255, 255, 255))
+    #screen.blit(fps_text_surface, (WIDTH - 300, 0))
 
     #Draws time
     time_text = "TIME"
