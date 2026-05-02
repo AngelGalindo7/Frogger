@@ -625,8 +625,6 @@ while in_game:
     frog_object.kill()
     death_counter = 0
   
-  clock.tick(64)
-
   delta_time = clock.tick(FPS) / 1000.0
   
   pygame.display.flip()  # Not sure what it does, makes display work
