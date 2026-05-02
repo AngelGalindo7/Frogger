@@ -1,6 +1,5 @@
 import pygame
 from pygame.math import Vector2
-from decimal import Decimal
 #-**import pygame
 from constants import SQUARE_SIZE, FPS, LOG_SKIN_SPRITES, LOG_SKINS, VECHILE_SKIN_SPRITES, VECHILE_SKINS, DEBUG_TOGGLE, LEFT, RIGHT
 """
@@ -11,7 +10,7 @@ File for the classes: Vehicle, Jogger, Log, Turtle
 VEHICLES = [
   [Vector2(600,640), 3, LEFT, SQUARE_SIZE * 4,VECHILE_SKINS.BASIC_1, 0.7, 2], # race_car1
   [Vector2(-40,600), 3, RIGHT, SQUARE_SIZE * 3,VECHILE_SKINS.TRACTOR, 0.7, 2], # tractor # 0.02
-  [Vector2(600, 560), 3, LEFT, SQUARE_SIZE * 3,VECHILE_SKINS.SPACESHIP, 0.7, 2], # space_ship # 0.019
+  [Vector2(600, 560), 3, LEFT, SQUARE_SIZE * 12,VECHILE_SKINS.SPACESHIP, 0.7, 2], # space_ship # 0.019
   [Vector2(-40,520), 3, RIGHT, SQUARE_SIZE * 8,VECHILE_SKINS.WHITE, 0.7, 2], # race_car2 
   [Vector2(600, 480), 3, LEFT, SQUARE_SIZE * 6,VECHILE_SKINS.BASIC_2, 0.7, 2], # truck
   [Vector2(600, 440), 3, LEFT, SQUARE_SIZE * 3,VECHILE_SKINS.PINK , 0.7, 2] 
@@ -65,7 +64,7 @@ class MovingObject(pygame.sprite.Sprite):
         self.rect.x = pos[0]
         self.rect.y = pos[1]
 
-        self.position = Vector2(Decimal(pos[0]), Decimal(pos[1]))
+        self.position = Vector2(float(pos[0]), float(pos[1]))
 
         # Direction it should be moving
         self.direction = properties[2]
