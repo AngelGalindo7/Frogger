@@ -105,25 +105,20 @@
       font-size: 17px;
       font-weight: bold;
       letter-spacing: 5px;
-      background: #444;
-      color: #888;
-      border: none;
-      border-radius: 8px;
-      cursor: default;
-      transition: background 0.2s, color 0.2s, transform 0.12s, box-shadow 0.2s;
-    }
-    #playBtn.ready {
       background: #009930;
       color: #fff;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.2s, transform 0.12s, box-shadow 0.2s;
       box-shadow: 0 4px 24px rgba(0,153,48,0.35);
     }
-    #playBtn.ready:hover {
+    #playBtn:hover {
       background: #00bf3f;
       transform: scale(1.06);
       box-shadow: 0 6px 36px rgba(0,200,60,0.55);
     }
-    #playBtn.ready:active { transform: scale(0.97); }
+    #playBtn:active { transform: scale(0.97); }
 
     #status {
       margin-top: 16px;
@@ -178,8 +173,8 @@
       <h1>FROGGER</h1>
       <p class="tagline">Classic Arcade Action</p>
       <div class="divider"></div>
-      <button id="playBtn" disabled>LOADING</button>
-      <p id="status">Downloading game</p>
+      <button id="playBtn">PLAY</button>
+      <p id="status"></p>
     </div>
 
     <p class="credit">Designed &amp; developed by Angel Galindo</p>
@@ -193,28 +188,15 @@
     const fade    = document.getElementById('fade');
     const overlay = document.getElementById('overlay');
 
-    function markReady() {
-      btn.textContent = 'PLAY';
-      btn.disabled = false;
-      btn.classList.add('ready');
-      status.textContent = '';
+    // Animate loading dots in status until game signals ready
+    function animateDots() {
+      if (window.pygame_ready) { status.textContent = ''; return; }
+      status.textContent = 'Loading' + '.'.repeat((Date.now() / 450 | 0) % 4);
+      setTimeout(animateDots, 250);
     }
-
-    function pollReady() {
-      // window.pygame_ready is set by Python via platform.window
-      // window.Module.calledRun is set by Emscripten when WASM has started
-      if (window.pygame_ready || (window.Module && window.Module.calledRun)) {
-        markReady();
-      } else {
-        const dots = '.'.repeat((Date.now() / 450 | 0) % 4);
-        status.textContent = 'Downloading game' + dots;
-        setTimeout(pollReady, 250);
-      }
-    }
-    setTimeout(pollReady, 500);
+    animateDots();
 
     btn.addEventListener('click', () => {
-      if (!btn.classList.contains('ready')) return;
       fade.classList.add('out');
       setTimeout(() => {
         overlay.classList.add('fade-out');
