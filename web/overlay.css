@@ -11,11 +11,12 @@ body {
 
 #canvas { display: block; }
 
-body > #status,
-body > #progress,
-body > #transfersub,
-body > .emscripten,
-body > .emscripten_border { display: none !important; }
+#status,
+#progress,
+#transfersub,
+#info,
+.emscripten,
+.emscripten_border { display: none !important; }
 
 /* ── landing overlay ── */
 #overlay {
