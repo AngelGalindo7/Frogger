@@ -177,6 +177,7 @@ class Frogger(pygame.sprite.Sprite):
         self.position = Vector2(7 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE * 2)
         self.rect.x = self.position.x
         self.rect.y = self.position.y  # 7 tiles from the left of the screen
+        self.at_end = False
       # 2 tiles from the bottom of the screen self.rect.x = 7 * constants.SQUARE_SIZE # 7 tiles from the left of the screen
 
     def draw(self, screen):

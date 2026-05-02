@@ -263,6 +263,28 @@ async def main():
 
   clock.tick(FPS)
 
+  # Home screen loop
+  title_font = pygame.font.SysFont('Comic Sans MS', 72)
+  subtitle_font = pygame.font.SysFont('Comic Sans MS', 30)
+  credit_font = pygame.font.SysFont('Comic Sans MS', 20)
+  at_home = True
+  while at_home:
+    screen.fill((0, 0, 0))
+    title_surf = title_font.render("FROGGER", False, (0, 255, 0))
+    sub_surf = subtitle_font.render("Press any key to start", False, (255, 255, 255))
+    credit_surf = credit_font.render("Designed & developed by Angel Galindo", False, (180, 180, 180))
+    screen.blit(title_surf, title_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 80)))
+    screen.blit(sub_surf, sub_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 10)))
+    screen.blit(credit_surf, credit_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 60)))
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit()
+        return
+      if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+        at_home = False
+    await asyncio.sleep(0)
+    pygame.display.flip()
+
   while in_game:
     # Fresh canvas
     screen.fill(BACKGROUND_COLOR)  # Draws background
