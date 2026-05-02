@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-pygame = ">=2.5.0"
+pygame-ce = ">=2.5.0"
 
 [tool.poetry.dev-dependencies]
 debugpy = "^1.6.2"
