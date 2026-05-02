@@ -62,10 +62,8 @@ async def main():
 
   # Signal the JS overlay that pygame is ready (pygbag/WASM only)
   try:
-    import sys
-    if sys.platform == "emscripten":
-      from platform import window
-      window.pygame_ready = True
+    import platform
+    platform.window.pygame_ready = True
   except Exception:
     pass
 

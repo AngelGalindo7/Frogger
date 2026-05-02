@@ -193,12 +193,18 @@
     const fade    = document.getElementById('fade');
     const overlay = document.getElementById('overlay');
 
+    function markReady() {
+      btn.textContent = 'PLAY';
+      btn.disabled = false;
+      btn.classList.add('ready');
+      status.textContent = '';
+    }
+
     function pollReady() {
-      if (window.pygame_ready) {
-        btn.textContent = 'PLAY';
-        btn.disabled = false;
-        btn.classList.add('ready');
-        status.textContent = '';
+      // window.pygame_ready is set by Python via platform.window
+      // window.Module.calledRun is set by Emscripten when WASM has started
+      if (window.pygame_ready || (window.Module && window.Module.calledRun)) {
+        markReady();
       } else {
         const dots = '.'.repeat((Date.now() / 450 | 0) % 4);
         status.textContent = 'Downloading game' + dots;
