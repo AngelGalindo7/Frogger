@@ -1,6 +1,5 @@
 import pygame
 from pygame.math import Vector2
-from decimal import Decimal
 from constants import SQUARE_SIZE, HEIGHT, WIDTH, WATER_ZONE_X, WATER_ZONE_Y
 from enum import IntEnum
 """
@@ -49,7 +48,7 @@ class Frogger(pygame.sprite.Sprite):
             "Frogger_main_skin/skin_Classic_base2.png")
         self.rect = self.image.get_rect()
         # 7 tiles from the left of the screen and 2 tiles from the bottom
-        self.position = Vector2(Decimal(7 * SQUARE_SIZE), Decimal(HEIGHT - SQUARE_SIZE * 2))
+        self.position = Vector2(7 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE * 2)
         self.rect.x = self.position.x
         self.rect.y = self.position.y
 
@@ -175,7 +174,7 @@ class Frogger(pygame.sprite.Sprite):
             self.bullets = True
 
     def death_reset(self):
-        self.position = Vector2(Decimal(7 * SQUARE_SIZE), Decimal(HEIGHT - SQUARE_SIZE * 2))
+        self.position = Vector2(7 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE * 2)
         self.rect.x = self.position.x
         self.rect.y = self.position.y  # 7 tiles from the left of the screen
       # 2 tiles from the bottom of the screen self.rect.x = 7 * constants.SQUARE_SIZE # 7 tiles from the left of the screen
