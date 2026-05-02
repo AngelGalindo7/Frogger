@@ -245,6 +245,8 @@ rainy_day = False
 # Main game loop
 in_game = True
 game_over = False
+game_over_timestamp = 0
+mouse_was_down = False
 # Randomizes whether or not there will be rain
 rand_num = random.randint(1,3)
 delta_time = 0
@@ -519,12 +521,45 @@ while in_game:
     death_counter = 0
 
   if (len(frogs.sprites()) <= 0):
-    game_over = True
+    if not game_over:
+      game_over = True
+      game_over_timestamp = time.time()
+      frog_object.kill()
+
     my_font2 = pygame.font.SysFont('Comic Sans MS', 50)
-    gameover_text = "GAME OVER"
-    gameover_text_surface = my_font2.render(gameover_text, False, (255, 255, 255))
-    screen.blit(gameover_text_surface, (WIDTH/2 - 100, HEIGHT/2 ))
-    frog_object.kill()
+    gameover_text_surface = my_font2.render("GAME OVER", False, (255, 255, 255))
+    screen.blit(gameover_text_surface, (WIDTH//2 - 100, HEIGHT//2))
+
+    if time.time() - game_over_timestamp >= 2:
+      btn_font = pygame.font.SysFont('Comic Sans MS', 35)
+      btn_text = btn_font.render("Try Again", False, (255, 255, 255))
+      btn_rect = pygame.Rect(WIDTH//2 - 80, HEIGHT//2 + 70, 160, 50)
+      pygame.draw.rect(screen, (50, 50, 50), btn_rect)
+      pygame.draw.rect(screen, (255, 255, 255), btn_rect, 2)
+      screen.blit(btn_text, (btn_rect.x + 15, btn_rect.y + 8))
+
+      mouse_now = pygame.mouse.get_pressed()[0]
+      if mouse_now and not mouse_was_down:
+        mx, my = pygame.mouse.get_pos()
+        if btn_rect.collidepoint(mx, my):
+          game_over = False
+          death_counter = 0
+          beginning_time = time.time()
+          timer.color = timer.green_color
+          frog_object.death_reset()
+          vehicles.empty()
+          turtles.empty()
+          logs.empty()
+          bullets.empty()
+          droplets.empty()
+          frogs.empty()
+          for x in range(0, frog_gap*3, frog_gap):
+            frogs.add(Frog("purple", x, 760))
+          for lp in lane_properties:
+            lp[0] = 0.0
+            lp[1] = 0
+            lp[2] = "group_separation"
+      mouse_was_down = mouse_now
 
   
       
