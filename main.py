@@ -16,6 +16,8 @@ Graphic Designer: Angel Galindo
 #----------------------------------
 import pygame, time  # Pygame is used for any function that affects the GUI(display)
 
+pygame.init()  # Must init before importing modules that call pygame.image.load() at module level
+
 from frogger import Frogger  # Importing different classes from different files
 """
 Will delete this code once I know using an all-import instead of these will not cause an error -Noah H
@@ -44,8 +46,6 @@ import time
 import random
 
 #----------------------------------------------
-
-pygame.init() # Initiates the GUI(display)
 
 # Constants BEGIN
 
